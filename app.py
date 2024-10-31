@@ -135,6 +135,7 @@ def analyze():
         support_confidence_dist_path = os.path.join(app.config['STATIC_FOLDER'], 'support_confidence_dist.png')
         plt.savefig(support_confidence_dist_path)
         plt.close()
+        print(f"Support and Confidence Distribution chart saved at: {support_confidence_dist_path}")  # Debug statement
 
         return render_template(
             'index.html', 
@@ -145,11 +146,12 @@ def analyze():
             lift_distribution_img='lift_distribution.png',
             top_lift_img='top_lift.png',
             heatmap_img='heatmap.png',
-            support_confidence_dist_img='support_confidence_dist.png',
+            support_confidence_dist_img='support_confidence_dist.png',  # Ensure this variable is included
             all_rules=rules.to_dict(orient='records')  # Pass all rules
         )
     
     except Exception as e:
+        print(f"Error during data processing: {e}")  # Debug statement
         return render_template('index.html', error=f"Data processing error: {e}")
 
     finally:

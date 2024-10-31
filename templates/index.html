@@ -10,7 +10,7 @@
 <body>
     <div class="container-fluid mt-5">
         <div class="card shadow-sm">
-            <div class="card-header  text-white text-center">
+            <div class="card-header text-white text-center">
                 <h1>Market Basket Analysis</h1>
             </div>
             <div class="card-body">
@@ -43,61 +43,66 @@
                         </div>
 
                         <div class="row text-center mb-4">
-                            <div class="col-lg-6 col-md-12">
+                            <div class="col-lg-4 col-md-6 mb-3">
                                 <img src="{{ url_for('static', filename=top_items_img) }}" class="img-fluid rounded shadow" alt="Top Items">
                                 <p>Top 10 Most Frequent Items</p>
                             </div>
-                            <div class="col-lg-6 col-md-12">
+                            <div class="col-lg-4 col-md-6 mb-3">
                                 <img src="{{ url_for('static', filename=support_confidence_img) }}" class="img-fluid rounded shadow" alt="Support vs Confidence">
-                                <p>Support vs Confidence (Top Rules)</p>
+                                <p>Support vs Confidence (Top Association Rules)</p>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <img src="{{ url_for('static', filename=lift_distribution_img) }}" class="img-fluid rounded shadow" alt="Lift Distribution">
+                                <p>Lift Distribution of Association Rules</p>
                             </div>
                         </div>
 
-                        <div class="row text-center">
+                        <div class="row text-center mb-4">
                             <div class="col-lg-4 col-md-6 mb-3">
-                                <img src="{{ url_for('static', filename=lift_distribution_img) }}" class="img-fluid rounded shadow" alt="Lift Distribution">
-                                <p>Lift Distribution</p>
-                            </div>
-                            <div class="col-lg-4 col-md-6 mb-3">
-                                <img src="{{ url_for('static', filename=top_lift_img) }}" class="img-fluid rounded shadow" alt="Top Item Pairs by Lift">
+                                <img src="{{ url_for('static', filename=top_lift_img) }}" class="img-fluid rounded shadow" alt="Top Lift">
                                 <p>Top 10 Item Pairs by Lift</p>
                             </div>
                             <div class="col-lg-4 col-md-6 mb-3">
-                                <img src="{{ url_for('static', filename=heatmap_img) }}" class="img-fluid rounded shadow" alt="Heatmap of Frequent Item Pairs">
+                                <img src="{{ url_for('static', filename=heatmap_img) }}" class="img-fluid rounded shadow" alt="Heatmap">
                                 <p>Heatmap of Frequent Item Pairs</p>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <img src="{{ url_for('static', filename=support_confidence_dist_img) }}" class="img-fluid rounded shadow" alt="Support and Confidence Distribution">
+                                <p>Support and Confidence Distribution</p>
                             </div>
                         </div>
 
-                        <h3 class="mb-3">Top Association Rules</h3>
-                        <div class="table-responsive">
+                        <h5>Top Association Rules</h5>
+                        <div class="table-container">
+                            <h3>Top Association Rules</h3>
                             <table class="table table-striped table-hover">
-                                <thead class="table-dark">
+                                <thead>
                                     <tr>
                                         <th>Antecedents</th>
                                         <th>Consequents</th>
-                                        <th>Lift</th>
-                                        <th>Confidence</th>
                                         <th>Support</th>
+                                        <th>Confidence</th>
+                                        <th>Lift</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for rule in rules %}
                                         <tr>
-                                            <td>{{ rule.antecedents|join(', ') }}</td>
-                                            <td>{{ rule.consequents|join(', ') }}</td>
-                                            <td>{{ rule.lift }}</td>
-                                            <td>{{ rule.confidence }}</td>
+                                            <td>{{ rule.antecedents | join(', ') }}</td>
+                                            <td>{{ rule.consequents | join(', ') }}</td>
                                             <td>{{ rule.support }}</td>
+                                            <td>{{ rule.confidence }}</td>
+                                            <td>{{ rule.lift }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-
-                        <h3 class="mb-3">All Association Rules</h3>
-                        <div class="table-container table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="table-light">
+                        
+                        <div class="table-container">
+                            <h3>All Association Rules</h3>
+                            <table class="table table-striped table-hover">
+                                <thead>
                                     <tr>
                                         <th>Antecedents</th>
                                         <th>Consequents</th>
@@ -109,8 +114,8 @@
                                 <tbody>
                                     {% for rule in all_rules %}
                                         <tr>
-                                            <td>{{ rule.antecedents|join(', ') }}</td>
-                                            <td>{{ rule.consequents|join(', ') }}</td>
+                                            <td>{{ rule.antecedents | join(', ') }}</td>
+                                            <td>{{ rule.consequents | join(', ') }}</td>
                                             <td>{{ rule.lift }}</td>
                                             <td>{{ rule.confidence }}</td>
                                             <td>{{ rule.support }}</td>
@@ -119,12 +124,12 @@
                                 </tbody>
                             </table>
                         </div>
+                        
                     </div>
                 {% endif %}
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

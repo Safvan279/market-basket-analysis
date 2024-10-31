@@ -1,8 +1,7 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-
 
 /* Base styling */
 body {
@@ -14,8 +13,7 @@ body {
 }
 
 /* Container for central alignment */
-.container-fluid{
-    /* max-width: 900px; */
+.container-fluid {
     margin: auto;
 }
 
@@ -105,26 +103,26 @@ button[type="submit"]:hover {
 
 /* Table styling */
 .table-container {
-    max-height: 400px;
-    overflow-y: auto;
+    max-height: 400px; /* Set the height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: relative; /* Needed for positioning */
 }
 
-.table {
-    border-collapse: collapse;
-    width: 100%;
+/* Fixed table header styling */
+.table th {
+    position: sticky;
+    top: 0; /* Stick the header to the top */
+    background-color: #00796b; /* Match the header background */
+    color: white; /* Text color */
+    z-index: 10; /* Ensure it appears above other content */
 }
 
+/* General table styling */
 .table th,
 .table td {
     padding: 12px;
     text-align: left;
     vertical-align: middle;
-}
-
-.table th {
-    background-color: #00796b;
-    color: white;
-    font-weight: bold;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -134,25 +132,4 @@ button[type="submit"]:hover {
 .table-hover tbody tr:hover {
     background-color: #e0f2f1;
 }
-
-/* Footer link styling */
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    display: inline;
-    margin-right: 15px;
-    font-weight: bold;
-}
-
-ul li a {
-    color: #004d4d;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-ul li a:hover {
-    color: #00796b;
-}
+    
