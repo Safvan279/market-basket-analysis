@@ -4,20 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Basket Analysis</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Add this CSS to style the scrollable table with a fixed header */
+        .table-container {
+            max-height: 15rem; /* Set the maximum height for the table container */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 1px solid #ddd; /* Optional: Add a border around the table */
+            margin-top: 1rem; /* Optional: Add some space above the table */
+            margin-bottom: 1rem; /* Optional: Add some space below the table */
+        }
+
+        table {
+            width: 100%; /* Make the table take full width */
+            border-collapse: collapse; /* Merge borders */
+            position: relative; /* Set position to relative for header positioning */
+        }
+
+        th, td {
+            padding: 0.5rem; /* Add some padding to table cells */
+            text-align: left; /* Align text to the left */
+            border-bottom: 1px solid #ddd; /* Add a border below each row */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Optional: Light gray background for header */
+            position: sticky; /* Enable sticky positioning for header */
+            top: 0; /* Stick to the top of the table container */
+            z-index: 10; /* Ensure header is above the table body */
+        }
+
+        /* Optional: Styling for table headers */
+        th {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for header */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Market Basket Analysis</h1>
-        <p>Upload your CSV file to analyze frequent product combinations and gain insights into effective cross-selling and upselling strategies.</p>
-        
-        <form action="/analyze" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".csv" required>
-            <button type="submit">Upload</button>
+        <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+            <label for="file">Upload your dataset (CSV):</label>
+            <input type="file" name="file" required>
+            <button type="submit">Analyze</button>
         </form>
-        
+
         {% if error %}
-            <p class="error">{{ error }}</p>
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if rules %}
+            <div class="results">
+                <h2>Analysis Results</h2>
+                <div>
+                    <h3>Model Accuracy</h3>
+                    <ul>
+                        {% for model, accuracy in model_results.items() %}
+                            <li>{{ model }}: {{ accuracy }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="graphs">
+                    <div class="graphs-container">
+                        <img src="{{ url_for('static', filename=top_items_img) }}" alt="Top Items">
+                        <img src="{{ url_for('static', filename=support_confidence_img) }}" alt="Support vs Confidence">
+                        <img src="{{ url_for('static', filename=lift_distribution_img) }}" alt="Lift Distribution">
+                    </div>
+                    
+                    <div class="graphs-container">
+                        <img src="{{ url_for('static', filename=top_lift_img) }}" alt="Top Item Pairs by Lift">
+                        <img src="{{ url_for('static', filename=heatmap_img) }}" alt="Heatmap of Frequent Item Pairs">
+                        <img src="{{ url_for('static', filename=support_confidence_dist_img) }}" alt="Support and Confidence Distribution">
+                    </div>
+                </div>
+
+                <h3>Top Association Rules</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Antecedents</th>
+                            <th>Consequents</th>
+                            <th>Lift</th>
+                            <th>Confidence</th>
+                            <th>Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rule in rules %}
+                            <tr>
+                                <td>{{ rule.antecedents|join(', ') }}</td>
+                                <td>{{ rule.consequents|join(', ') }}</td>
+                                <td>{{ rule.lift }}</td>
+                                <td>{{ rule.confidence }}</td>
+                                <td>{{ rule.support }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3>All Association Rules</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Antecedents</th>
+                                <th>Consequents</th>
+                                <th>Lift</th>
+                                <th>Confidence</th>
+                                <th>Support</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rule in all_rules %}
+                                <tr>
+                                    <td>{{ rule.antecedents|join(', ') }}</td>
+                                    <td>{{ rule.consequents|join(', ') }}</td>
+                                    <td>{{ rule.lift }}</td>
+                                    <td>{{ rule.confidence }}</td>
+                                    <td>{{ rule.support }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         {% endif %}
     </div>
 </body>

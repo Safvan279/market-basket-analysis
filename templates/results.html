@@ -1,51 +1,78 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis Results</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Analysis Results</h1>
 
-        <section>
-            <h2>Top Association Rules</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Antecedents</th>
-                        <th>Consequents</th>
-                        <th>Support</th>
-                        <th>Confidence</th>
-                        <th>Lift</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for rule in rules %}
-                    <tr>
-                        <td>{{ rule.antecedents }}</td>
-                        <td>{{ rule.consequents }}</td>
-                        <td>{{ rule.support }}</td>
-                        <td>{{ rule.confidence }}</td>
-                        <td>{{ rule.lift }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <section>
-            <h2>Model Performance</h2>
-            <ul>
-                {% for model, accuracy in model_results.items() %}
-                    <li class="model">{{ model }} Accuracy: {{ accuracy|round(2) }}</li>
+        <div class="accuracy-details">
+            <h2>Model Accuracy Details</h2>
+            <ul class="model-results">
+                {% for model, score in model_results.items() %}
+                    <li class="model-item">{{ model }}: {{ score }}</li>
                 {% endfor %}
             </ul>
-        </section>
+        </div>
 
-        <a href="/" class="btn">Go back</a>
+        <div class="results-section">
+            <div class="graph-container">
+                <div class="graph">
+                    <h2>Top 10 Most Frequent Items</h2>
+                    <img src="{{ url_for('static', filename=top_items_img) }}" alt="Top 10 Most Frequent Items" class="result-img">
+                </div>
+                <div class="graph">
+                    <h2>Support vs Confidence</h2>
+                    <img src="{{ url_for('static', filename=support_confidence_img) }}" alt="Support vs Confidence" class="result-img">
+                </div>
+                <div class="graph">
+                    <h2>Lift Distribution</h2>
+                    <img src="{{ url_for('static', filename=lift_distribution_img) }}" alt="Lift Distribution" class="result-img">
+                </div>
+            </div>
+            <div class="graph-container">
+                <div class="graph">
+                    <h2>Top 10 Item Pairs by Lift</h2>
+                    <img src="{{ url_for('static', filename=top_lift_img) }}" alt="Top 10 Item Pairs by Lift" class="result-img">
+                </div>
+                <div class="graph">
+                    <h2>Heatmap of Frequent Item Pairs</h2>
+                    <img src="{{ url_for('static', filename=heatmap_img) }}" alt="Heatmap of Frequent Item Pairs" class="result-img">
+                </div>
+                <div class="graph">
+                    <h2>Support and Confidence Distribution</h2>
+                    <img src="{{ url_for('static', filename=support_confidence_dist_img) }}" alt="Support and Confidence Distribution" class="result-img">
+                </div>
+            </div>
+        </div>
+
+        <h2>Association Rules</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Antecedents</th>
+                    <th>Consequents</th>
+                    <th>Support</th>
+                    <th>Confidence</th>
+                    <th>Lift</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rule in rules %}
+                    <tr>
+                        <td>{{ rule['antecedents'] }}</td>
+                        <td>{{ rule['consequents'] }}</td>
+                        <td>{{ rule['support'] }}</td>
+                        <td>{{ rule['confidence'] }}</td>
+                        <td>{{ rule['lift'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
-</html>
+</html> -->
