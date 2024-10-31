@@ -55,31 +55,45 @@ def analyze():
 
         # Visualization 1: Top 10 Most Frequent Items
         item_counts = data['Item'].value_counts().head(10)
-        plt.figure(figsize=(4, 3))  # Smaller size
+        plt.figure(figsize=(6, 4))
         sns.barplot(x=item_counts.values, y=item_counts.index, palette='viridis')
         plt.title('Top 10 Most Frequent Items')
         plt.xlabel('Frequency')
         plt.ylabel('Item')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
         top_items_path = os.path.join(app.config['STATIC_FOLDER'], 'top_items.png')
         plt.savefig(top_items_path)
         plt.close()
 
         # Visualization 2: Support vs Confidence of Top Rules
-        plt.figure(figsize=(4, 3))  # Smaller size
-        sns.scatterplot(x=top_rules['support'], y=top_rules['confidence'], size=top_rules['lift'], sizes=(50, 300), hue=top_rules['lift'], palette='coolwarm', legend=False)
+        plt.figure(figsize=(6, 4))
+        sns.scatterplot(
+            x=top_rules['support'], 
+            y=top_rules['confidence'], 
+            size=top_rules['lift'], 
+            sizes=(50, 300), 
+            hue=top_rules['lift'], 
+            palette='coolwarm', 
+            legend=False
+        )
         plt.title('Support vs Confidence (Top Association Rules)')
         plt.xlabel('Support')
         plt.ylabel('Confidence')
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=45)
+        plt.tight_layout()
         support_confidence_path = os.path.join(app.config['STATIC_FOLDER'], 'support_confidence.png')
         plt.savefig(support_confidence_path)
         plt.close()
 
         # Visualization 3: Lift Distribution of Rules
-        plt.figure(figsize=(4, 3))  # Smaller size
+        plt.figure(figsize=(6, 4))
         sns.histplot(rules['lift'], bins=20, kde=True, color='purple')
         plt.title('Lift Distribution of Association Rules')
         plt.xlabel('Lift')
         plt.ylabel('Frequency')
+        plt.tight_layout()
         lift_distribution_path = os.path.join(app.config['STATIC_FOLDER'], 'lift_distribution.png')
         plt.savefig(lift_distribution_path)
         plt.close()
@@ -98,21 +112,26 @@ def analyze():
 
         # Visualization 5: Heatmap of Frequent Item Pairs
         item_pair_counts = data.groupby(['TransactionID', 'Item']).size().unstack().fillna(0).corr()
-        plt.figure(figsize=(4, 3))
-        sns.heatmap(item_pair_counts, cmap="YlGnBu", linewidths=0.5)
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(item_pair_counts, cmap="YlGnBu", linewidths=0.5, cbar_kws={'shrink': 0.5})
         plt.title('Heatmap of Frequent Item Pairs')
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=45)
+        plt.tight_layout()
         heatmap_path = os.path.join(app.config['STATIC_FOLDER'], 'heatmap.png')
         plt.savefig(heatmap_path)
         plt.close()
 
         # Visualization 6: Support and Confidence Distribution
-        plt.figure(figsize=(4, 3))
+        plt.figure(figsize=(6, 4))
         sns.kdeplot(rules['support'], shade=True, color="red", label="Support")
         sns.kdeplot(rules['confidence'], shade=True, color="blue", label="Confidence")
         plt.title('Distribution of Support and Confidence')
         plt.xlabel('Value')
         plt.ylabel('Density')
         plt.legend()
+        plt.xticks(rotation=45)
+        plt.tight_layout()
         support_confidence_dist_path = os.path.join(app.config['STATIC_FOLDER'], 'support_confidence_dist.png')
         plt.savefig(support_confidence_dist_path)
         plt.close()
