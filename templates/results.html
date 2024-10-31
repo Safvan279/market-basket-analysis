@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analysis Results</h1>
+
+        <section>
+            <h2>Top Association Rules</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Antecedents</th>
+                        <th>Consequents</th>
+                        <th>Support</th>
+                        <th>Confidence</th>
+                        <th>Lift</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rule in rules %}
+                    <tr>
+                        <td>{{ rule.antecedents }}</td>
+                        <td>{{ rule.consequents }}</td>
+                        <td>{{ rule.support }}</td>
+                        <td>{{ rule.confidence }}</td>
+                        <td>{{ rule.lift }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Model Performance</h2>
+            <ul>
+                {% for model, accuracy in model_results.items() %}
+                    <li class="model">{{ model }} Accuracy: {{ accuracy|round(2) }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <a href="/" class="btn">Go back</a>
+    </div>
+</body>
+</html>
