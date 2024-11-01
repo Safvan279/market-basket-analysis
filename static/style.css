@@ -1,20 +1,62 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /* Base styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
     color: #333;
-    margin: 0;
-    padding: 20px;
+    line-height: 1.6;
 }
 
-/* Container for central alignment */
-.container-fluid {
-    margin: auto;
+/* Navbar styling */
+nav {
+    background-color: #00796b; /* Teal */
+    color: white;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #cfd8dc; /* Light grey */
+}
+
+/* Hero Section styling */
+.hero {
+    background-image: url('https://source.unsplash.com/1600x400/?business,data');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.2rem;
 }
 
 /* Card styling */
@@ -22,21 +64,20 @@ body {
     border: none;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
 .card-header {
     background-color: #00695c; /* Deep teal */
     color: white;
     padding: 20px;
+    text-align: center;
 }
 
 .card-body {
-    padding: 30px;
+    padding: 30px;  
     background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-top: none;
-    border-bottom-right-radius: 12px;
-    border-bottom-left-radius: 12px;
 }
 
 /* Form elements */
@@ -47,24 +88,28 @@ body {
 
 input[type="file"] {
     border: 1px solid #cccccc;
-    padding: 8px;
+    padding: 12px;
     border-radius: 6px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 button[type="submit"] {
     background-color: #00796b; /* Teal */
     color: #fff;
     border: none;
-    padding: 10px;
+    padding: 12px;
     font-size: 1.1rem;
     font-weight: bold;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
     border-radius: 8px;
     width: 100%;
+    cursor: pointer;
 }
 
 button[type="submit"]:hover {
     background-color: #004d4d; /* Darker teal */
+    transform: translateY(-2px); /* Button lift effect */
 }
 
 /* Error message styling */
@@ -101,23 +146,27 @@ button[type="submit"]:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Graphs styling */
+.graph-img {
+    width: 100%;  
+    height: 300px; 
+    object-fit: cover; 
+}
+
 /* Table styling */
 .table-container {
-    max-height: 400px; /* Set the height for scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
-    position: relative; /* Needed for positioning */
+    max-height: 20rem; 
+    overflow-y: auto; 
 }
 
-/* Fixed table header styling */
 .table th {
     position: sticky;
-    top: 0; /* Stick the header to the top */
-    background-color: #00796b; /* Match the header background */
-    color: white; /* Text color */
-    z-index: 10; /* Ensure it appears above other content */
+    top: 0; 
+    background-color: #00796b; 
+    color: white; 
+    z-index: 10; 
 }
 
-/* General table styling */
 .table th,
 .table td {
     padding: 12px;
@@ -132,4 +181,12 @@ button[type="submit"]:hover {
 .table-hover tbody tr:hover {
     background-color: #e0f2f1;
 }
-    
+
+/* Footer styling */
+footer {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #00796b; /* Teal */
+    color: white;
+}
