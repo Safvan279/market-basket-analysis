@@ -25,9 +25,22 @@ os.makedirs(STATIC_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['STATIC_FOLDER'] = STATIC_FOLDER
 
-@app.route('/')
+@app.route('/home')
 def index():
     return render_template('index.html')
+
+@app.route('/')
+def intro():
+    return render_template('intro.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 @app.route('/about')
 def about():
