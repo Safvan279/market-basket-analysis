@@ -50,11 +50,19 @@ nav ul li a:hover {
     text-align: center;
 }
 
+.container h1{
+    color: black;
+}
+
 .hero h1 {
     font-size: 3rem;
     font-weight: bold;
 }
 
+
+footer{
+    margin-top: 5.2rem !important;
+}
 .hero p {
     font-size: 1.2rem;
 }
