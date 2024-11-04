@@ -160,6 +160,9 @@ def analyze():
         rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
         top_rules = rules.sort_values(by='lift', ascending=False).head(10)
 
+        # Visualization generation
+        generate_visualizations(data, top_rules, rules)
+
         # Prepare data for ML models
         le = LabelEncoder()
         data['Item_encoded'] = le.fit_transform(data['Item'])
@@ -167,7 +170,6 @@ def analyze():
         
         # Create artificial labels
         data['label'] = (data['Item'].str.len() % 2)
-        
         y = data.groupby('TransactionID')['label'].first().reindex(transactions.index)
 
         # Feature Scaling
@@ -186,18 +188,7 @@ def analyze():
         X_train, X_test, y_train, y_test = train_test_split(X_reduced, y_resampled, test_size=0.2, random_state=42)
 
         # Model Training and Evaluation
-        models = {
-            'Random Forest': RandomForestClassifier(),
-            'Naive Bayes': GaussianNB(),
-            'SVM': SVC()
-        }
-        model_results = {}
-
-        for model_name, model in models.items():
-            model.fit(X_train, y_train)
-            predictions = model.predict(X_test)
-            accuracy = accuracy_score(y_test, predictions)
-            model_results[f'{model_name} Accuracy'] = accuracy
+        model_results = train_and_evaluate_models(X_train, y_train, X_test, y_test)
 
         return render_template(
             'index.html',
@@ -212,6 +203,108 @@ def analyze():
     finally:
         if os.path.exists(file_path):
             os.remove(file_path)
+
+def generate_visualizations(data, top_rules, rules):
+    """Generates and saves all visualizations needed for analysis."""
+    # Visualization 1: Top 10 Most Frequent Items
+    item_counts = data['Item'].value_counts().head(10)
+    plt.figure(figsize=(6, 4))
+    sns.barplot(x=item_counts.values, y=item_counts.index, palette='viridis')
+    plt.title('Top 10 Most Frequent Items')
+    plt.xlabel('Frequency')
+    plt.ylabel('Item')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    top_items_path = os.path.join(app.config['STATIC_FOLDER'], 'top_items.png')
+    plt.savefig(top_items_path)
+    plt.close()
+
+    # Visualization 2: Support vs Confidence of Top Rules
+    plt.figure(figsize=(6, 4))
+    sns.scatterplot(
+        x=top_rules['support'], 
+        y=top_rules['confidence'], 
+        size=top_rules['lift'], 
+        sizes=(50, 300), 
+        hue=top_rules['lift'], 
+        palette='coolwarm', 
+        legend=False
+    )
+    plt.title('Support vs Confidence (Top Association Rules)')
+    plt.xlabel('Support')
+    plt.ylabel('Confidence')
+    plt.xticks(rotation=45)
+    plt.yticks(rotation=45)
+    plt.tight_layout()
+    support_confidence_path = os.path.join(app.config['STATIC_FOLDER'], 'support_confidence.png')
+    plt.savefig(support_confidence_path)
+    plt.close()
+
+    # Visualization 3: Lift Distribution of Rules
+    plt.figure(figsize=(6, 4))
+    sns.histplot(rules['lift'], bins=20, kde=True, color='purple')
+    plt.title('Lift Distribution of Association Rules')
+    plt.xlabel('Lift')
+    plt.ylabel('Frequency')
+    plt.tight_layout()
+    lift_distribution_path = os.path.join(app.config['STATIC_FOLDER'], 'lift_distribution.png')
+    plt.savefig(lift_distribution_path)
+    plt.close()
+
+    # Visualization 4: Top 10 Item Pairs by Lift
+    top_lift_rules = top_rules[['antecedents', 'consequents', 'lift']].head(10)
+    top_lift_rules['item_pair'] = top_lift_rules['antecedents'].astype(str) + ' -> ' + top_lift_rules['consequents'].astype(str)
+    plt.figure(figsize=(4, 3))
+    sns.barplot(x=top_lift_rules['lift'], y=top_lift_rules['item_pair'], palette='Blues_d')
+    plt.title('Top 10 Item Pairs by Lift')
+    plt.xlabel('Lift')
+    plt.ylabel('Item Pair')
+    top_lift_path = os.path.join(app.config['STATIC_FOLDER'], 'top_lift.png')
+    plt.savefig(top_lift_path)
+    plt.close()
+
+    # Visualization 5: Heatmap of Frequent Item Pairs
+    item_pair_counts = data.groupby(['TransactionID', 'Item']).size().unstack().fillna(0).corr()
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(item_pair_counts, cmap="YlGnBu", linewidths=0.5, cbar_kws={'shrink': 0.5})
+    plt.title('Heatmap of Frequent Item Pairs')
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=45)
+    plt.tight_layout()
+    heatmap_path = os.path.join(app.config['STATIC_FOLDER'], 'heatmap.png')
+    plt.savefig(heatmap_path)
+    plt.close()
+
+    # Visualization 6: Support and Confidence Distribution
+    plt.figure(figsize=(6, 4))
+    sns.kdeplot(rules['support'], shade=True, color="red", label="Support")
+    sns.kdeplot(rules['confidence'], shade=True, color="blue", label="Confidence")
+    plt.title('Distribution of Support and Confidence')
+    plt.xlabel('Value')
+    plt.ylabel('Density')
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    support_confidence_dist_path = os.path.join(app.config['STATIC_FOLDER'], 'support_confidence_dist.png')
+    plt.savefig(support_confidence_dist_path)
+    plt.close()
+
+def train_and_evaluate_models(X_train, y_train, X_test, y_test):
+    """Trains multiple models and returns their accuracies."""
+    models = {
+        'Random Forest': RandomForestClassifier(),
+        'Naive Bayes': GaussianNB(),
+        'SVM': SVC()
+    }
+    model_results = {}
+
+    for model_name, model in models.items():
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        accuracy = accuracy_score(y_test, predictions)
+        model_results[f'{model_name} Accuracy'] = accuracy
+
+    return model_results
 
 if __name__ == '__main__':
     app.run(debug=True)

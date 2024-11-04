@@ -55,31 +55,44 @@
                 {% if error %}
                     <div class="alert alert-danger text-center">{{ error }}</div>
                 {% endif %}
-                {% if rules %}
+                {% if model_results %}
                     <h2 class="text-center mb-4">Analysis Results</h2>
                     <h5 class="text-success">Model Accuracy</h5>
                     <ul class="list-group list-group-flush mb-4">
                         {% for model, accuracy in model_results.items() %}
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>{{ model }}</span>
-                                <span>{{ accuracy }}</span>
+                                <span>{{ accuracy | round(4) }}</span> <!-- Rounding for better display -->
                             </li>
                         {% endfor %}
                     </ul>
 
                     <h3 class="text-success">Visualizations</h3>
                     <div class="row mb-4">
-                        {% for img, desc in [(top_items_img, 'Top 10 Most Frequent Items'),
-                                             (support_confidence_img, 'Support vs Confidence (Top Association Rules)'),
-                                             (lift_distribution_img, 'Lift Distribution'),
-                                             (top_lift_img, 'Top 10 Item Pairs by Lift'),
-                                             (heatmap_img, 'Heatmap of Frequent Item Pairs'),
-                                             (support_confidence_dist_img, 'Support and Confidence Distribution')] %}
                         <div class="col-md-4 mb-3">
-                            <img src="{{ url_for('static', filename=img) }}" class="img-fluid graph-img rounded shadow" alt="{{ desc }}">
-                            <p class="text-center">{{ desc }}</p>
+                            <img src="{{ url_for('static', filename='top_items.png') }}" class="img-fluid graph-img rounded shadow" alt="Top 10 Most Frequent Items">
+                            <p class="text-center">Top 10 Most Frequent Items</p>
                         </div>
-                        {% endfor %}
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ url_for('static', filename='support_confidence.png') }}" class="img-fluid graph-img rounded shadow" alt="Support vs Confidence (Top Association Rules)">
+                            <p class="text-center">Support vs Confidence (Top Association Rules)</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ url_for('static', filename='lift_distribution.png') }}" class="img-fluid graph-img rounded shadow" alt="Lift Distribution">
+                            <p class="text-center">Lift Distribution of Association Rules</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ url_for('static', filename='top_lift.png') }}" class="img-fluid graph-img rounded shadow" alt="Top 10 Item Pairs by Lift">
+                            <p class="text-center">Top 10 Item Pairs by Lift</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ url_for('static', filename='heatmap.png') }}" class="img-fluid graph-img rounded shadow" alt="Heatmap of Frequent Item Pairs">
+                            <p class="text-center">Heatmap of Frequent Item Pairs</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <img src="{{ url_for('static', filename='support_confidence_dist.png') }}" class="img-fluid graph-img rounded shadow" alt="Support and Confidence Distribution">
+                            <p class="text-center">Support and Confidence Distribution</p>
+                        </div>
                     </div>
 
                     <h3 class="text-success">Top Association Rules</h3>
@@ -99,9 +112,9 @@
                                     <tr>
                                         <td>{{ rule['antecedents'] }}</td>
                                         <td>{{ rule['consequents'] }}</td>
-                                        <td>{{ rule['support'] }}</td>
-                                        <td>{{ rule['confidence'] }}</td>
-                                        <td>{{ rule['lift'] }}</td>
+                                        <td>{{ rule['support'] | round(4) }}</td>
+                                        <td>{{ rule['confidence'] | round(4) }}</td>
+                                        <td>{{ rule['lift'] | round(4) }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -125,15 +138,14 @@
                                     <tr>
                                         <td>{{ rule['antecedents'] }}</td>
                                         <td>{{ rule['consequents'] }}</td>
-                                        <td>{{ rule['support'] }}</td>
-                                        <td>{{ rule['confidence'] }}</td>
-                                        <td>{{ rule['lift'] }}</td>
+                                        <td>{{ rule['support'] | round(4) }}</td>
+                                        <td>{{ rule['confidence'] | round(4) }}</td>
+                                        <td>{{ rule['lift'] | round(4) }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    
                 {% endif %}
             </div>
         </div>
@@ -147,4 +159,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-    
